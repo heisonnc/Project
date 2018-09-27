@@ -70,21 +70,19 @@ INode* BuildTree(const int(&frequencies)[UniqueSymbols]){
 	}
 	return trees.top();
 }
-
-void GenerateCodes(const INode* node, const HuffCode& prefix, HuffCodeMap& outCodes)  // metodo recursivo que genera el codigo binario de la expresion que se le ingreso
-{
-	if (const LeafNode* lf = dynamic_cast<const LeafNode*>(node)){
+// metodo recursivo que genera el codigo binario de la expresion que se le ingreso
+void generadorCodigo(const INode* nodo, const HuffCode& prefix, HuffCodeMap& outCodes){
+	if (const LeafNode* lf = dynamic_cast<const LeafNode*>(nodo)){
 		outCodes[lf->c] = prefix;
 	}
-	else if (const InternalNode* in = dynamic_cast<const InternalNode*>(node))
-	{
+	else if (const InternalNode* in = dynamic_cast<const InternalNode*>(nodo)){
 		HuffCode leftPrefix = prefix;
 		leftPrefix.push_back(false);  // aqui es donde se crea el codigo binario false->0 -> izquierda
-		GenerateCodes(in->left, leftPrefix, outCodes);
+		generadorCodigo(in->left, leftPrefix, outCodes);
 
 		HuffCode rightPrefix = prefix;
 		rightPrefix.push_back(true);// aqui es donde se crea el codigo binario true->1 -> derecha
-		GenerateCodes(in->right, rightPrefix, outCodes);
+		generadorCodigo(in->right, rightPrefix, outCodes);
 	}
 }
 
@@ -102,7 +100,7 @@ int main(){
 	INode* root = BuildTree(frequencies);  // crea el arbol que codifica con el metodo de huffman la expresion 
 
 	HuffCodeMap codes;
-	GenerateCodes(root, HuffCode(), codes);  // genera el codigo bnario del arbol
+	generadorCodigo(root, HuffCode(), codes);  // genera el codigo bnario del arbol
 	delete root;
 
 	for (HuffCodeMap::const_iterator it = codes.begin(); it != codes.end(); ++it)
