@@ -116,6 +116,8 @@ int main()
 			std::ostream_iterator<bool>(std::cout));
 		std::cout << std::endl;
 	}
+
+	std::cout << "Hola";
 	system("pause");
 	return 0;
 }
