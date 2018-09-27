@@ -6,15 +6,13 @@
 #include <iterator>
 #include <algorithm>
 
-//Hola mundo
+
 const int UniqueSymbols = 1 << CHAR_BIT;
 const char* SampleString = "hholaaa";
-// hi-----------------------------------------
-//Yupii esta sirviendo
-//hey no sirve
+
 typedef std::vector<bool> HuffCode;
 typedef std::map<char, HuffCode> HuffCodeMap;
-//----------------
+
 class INode
 {
 public:
