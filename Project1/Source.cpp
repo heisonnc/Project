@@ -13,6 +13,7 @@ const char* SampleString = "";
 typedef std::vector<bool> HuffCode;// aqui se almacena el codigo binario del arbol
 typedef std::map<char, HuffCode> HuffCodeMap;  // crea un mapa con llave char que sera el caracter que codifico y guarda el codigo  binario para dicho caracter
  
+//clase padre
 class INode{
 public:
 	const int frequency;
@@ -21,7 +22,8 @@ protected:
 	INode(int f) : frequency(f) {}
 };
 
-// esto es un nodo para el arbol, heredado de un nodo que solo tiene un atributo int
+// esto es un nodo para el arbol, heredado de un nodo que solo tiene un atributo int 
+//Esta clase corresponde al teorema 6.2 el punto 1...
 class InternalNode : public INode{
 	//internalNode va a tener una frequencia que va a ser igual a la suma de INode left + INode right
 public:
@@ -35,36 +37,36 @@ public:
 	}
 };
 
-class LeafNode : public INode  // este nodo guarda los caracter a codificar
-{
+// este nodo guarda los caracter a codificar
+class LeafNode : public INode{
 public:
 	const char c;
-
 	LeafNode(int f, char c) : INode(f), c(c) {}
 };
 
-struct NodeCmp  // compara la frecuencia de 2 nodos 
-{
-	bool operator()(const INode* lhs, const INode* rhs) const { return lhs->f > rhs->f; }
+// compara la frecuencia de 2 nodos
+struct NodeCmp{
+	bool operator()(const INode* lhs, const INode* rhs) const { return lhs->frequency > rhs->frequency; }
 };
 
-INode* BuildTree(const int(&frequencies)[UniqueSymbols])
-{
-	std::priority_queue<INode*, std::vector<INode*>, NodeCmp> trees;  // esto inserta ordenado a la cola tree tomando en cuenta la frecuencia 
-																	// del caracter
+INode* BuildTree(const int(&frequencies)[UniqueSymbols]){
+	//declara un priority_queue automatico.
+	// esto inserta ordenado a la cola tree tomando en cuenta la frecuencia del caracter																
+	std::priority_queue<INode*, std::vector<INode*>, NodeCmp> trees;  
 	for (int i = 0; i < UniqueSymbols; ++i){
 		if (frequencies[i] != 0)
 			trees.push(new LeafNode(frequencies[i], (char)i));
 	}
 	while (trees.size() > 1){
-		INode* childR = trees.top();
+		INode* hijoR = trees.top();
 		trees.pop();
 
-		INode* childL = trees.top();
+		INode* hijoI = trees.top();
 		trees.pop();
-							// crea un nodo con los 2 ultimos pesos menores  y lo vuelve a insertar a la pila, esto para crear la estructura del codigo de huffman
-		INode* parent = new InternalNode(childR, childL);//donde los que tienen menos peso(se repiten menos) estan al final y a la derecha
-		trees.push(parent);
+		// crea un nodo con los 2 ultimos pesos menores  y lo vuelve a insertar a la pila,
+		//esto para crear la estructura del codigo de huffman
+		INode* padre = new InternalNode(hijoR, hijoI);//donde los que tienen menos frecuencia estan al final y a la derecha
+		trees.push(padre);
 	}
 	return trees.top();
 }
@@ -86,8 +88,7 @@ void GenerateCodes(const INode* node, const HuffCode& prefix, HuffCodeMap& outCo
 	}
 }
 
-int main()
-{
+int main(){
 	// Build frequency table
 	int frequencies[UniqueSymbols] = { 0 };
 	std::string pal="";
