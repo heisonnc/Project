@@ -38,7 +38,7 @@ public:
 	}
 };
 
-class LeafNode : public INode
+class LeafNode : public INode  // este nodo guarda los caracter a codificar
 {
 public:
 	const char c;
@@ -46,15 +46,15 @@ public:
 	LeafNode(int f, char c) : INode(f), c(c) {}
 };
 
-struct NodeCmp
+struct NodeCmp  // compara la frecuencia de 2 nodos 
 {
 	bool operator()(const INode* lhs, const INode* rhs) const { return lhs->f > rhs->f; }
 };
 
 INode* BuildTree(const int(&frequencies)[UniqueSymbols])
 {
-	std::priority_queue<INode*, std::vector<INode*>, NodeCmp> trees;
-
+	std::priority_queue<INode*, std::vector<INode*>, NodeCmp> trees;  // esto inserta ordenado a la cola tree tomando en cuenta la frecuencia 
+																	// del caracter
 	for (int i = 0; i < UniqueSymbols; ++i)
 	{
 		if (frequencies[i] != 0)
@@ -67,14 +67,14 @@ INode* BuildTree(const int(&frequencies)[UniqueSymbols])
 
 		INode* childL = trees.top();
 		trees.pop();
-
-		INode* parent = new InternalNode(childR, childL);
+							// crea un nodo con los 2 ultimos pesos menores  y lo vuelve a insertar a la pila, esto para crear la estructura del codigo de huffman
+		INode* parent = new InternalNode(childR, childL);//donde los que tienen menos peso(se repiten menos) estan al final y a la derecha
 		trees.push(parent);
 	}
 	return trees.top();
 }
 
-void GenerateCodes(const INode* node, const HuffCode& prefix, HuffCodeMap& outCodes)
+void GenerateCodes(const INode* node, const HuffCode& prefix, HuffCodeMap& outCodes)  // metodo recursivo
 {
 	if (const LeafNode* lf = dynamic_cast<const LeafNode*>(node))
 	{
@@ -83,11 +83,11 @@ void GenerateCodes(const INode* node, const HuffCode& prefix, HuffCodeMap& outCo
 	else if (const InternalNode* in = dynamic_cast<const InternalNode*>(node))
 	{
 		HuffCode leftPrefix = prefix;
-		leftPrefix.push_back(false);
+		leftPrefix.push_back(false);  // aqui es donde se crea el codigo binario false->0 -> izquierda
 		GenerateCodes(in->left, leftPrefix, outCodes);
 
 		HuffCode rightPrefix = prefix;
-		rightPrefix.push_back(true);
+		rightPrefix.push_back(true);// aqui es donde se crea el codigo binario true->1 -> derecha
 		GenerateCodes(in->right, rightPrefix, outCodes);
 	}
 }
