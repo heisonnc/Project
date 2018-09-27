@@ -24,7 +24,7 @@ protected:
 	INode(int f) : f(f) {}
 };
 
-class InternalNode : public INode
+class InternalNode : public INode  // esto es un nodo para el arbol, heredado de un nodo que solo tiene un atributo int
 {
 public:
 	INode *const left;
