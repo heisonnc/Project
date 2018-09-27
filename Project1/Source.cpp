@@ -7,12 +7,12 @@
 #include <algorithm>
 
 
-const int UniqueSymbols = 1 << CHAR_BIT;
-const char* SampleString = "Lo logramos jaja, tengo companeras ak7";
+const int UniqueSymbols = 1 << 8;
+const char* SampleString = "";
 
 typedef std::vector<bool> HuffCode;// aqui se almacena el codigo binario del arbol
 typedef std::map<char, HuffCode> HuffCodeMap;  // crea un mapa con llave char que sera el caracter que codifico y guarda el codigo  binario para dicho caracter
-
+ 
 class INode
 {
 public:
@@ -55,13 +55,11 @@ INode* BuildTree(const int(&frequencies)[UniqueSymbols])
 {
 	std::priority_queue<INode*, std::vector<INode*>, NodeCmp> trees;  // esto inserta ordenado a la cola tree tomando en cuenta la frecuencia 
 																	// del caracter
-	for (int i = 0; i < UniqueSymbols; ++i)
-	{
+	for (int i = 0; i < UniqueSymbols; ++i){
 		if (frequencies[i] != 0)
 			trees.push(new LeafNode(frequencies[i], (char)i));
 	}
-	while (trees.size() > 1)
-	{
+	while (trees.size() > 1){
 		INode* childR = trees.top();
 		trees.pop();
 
@@ -76,8 +74,7 @@ INode* BuildTree(const int(&frequencies)[UniqueSymbols])
 
 void GenerateCodes(const INode* node, const HuffCode& prefix, HuffCodeMap& outCodes)  // metodo recursivo que genera el codigo binario de la expresion que se le ingreso
 {
-	if (const LeafNode* lf = dynamic_cast<const LeafNode*>(node))
-	{
+	if (const LeafNode* lf = dynamic_cast<const LeafNode*>(node)){
 		outCodes[lf->c] = prefix;
 	}
 	else if (const InternalNode* in = dynamic_cast<const InternalNode*>(node))
@@ -98,8 +95,8 @@ int main()
 	int frequencies[UniqueSymbols] = { 0 };
 	std::string pal="";
 	std::cout << "Digite la palabra que desea codificar \n";
-	std::cin >> pal;
-
+	std::cin.ignore();
+	std::getline(std::cin,pal);
 	const char* ptr = pal.c_str();
 	while (*ptr != '\0')
 		++frequencies[*ptr++];
