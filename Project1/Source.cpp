@@ -73,6 +73,7 @@ INode* BuildTree(const int(&frequencies)[UniqueSymbols]){
 // metodo recursivo que genera el codigo binario de la expresion que se le ingreso
 void generadorCodigo(const INode* nodo, const HuffCode& prefix, HuffCodeMap& outCodes){
 	if (const LeafNode* lf = dynamic_cast<const LeafNode*>(nodo)){
+		//ingresa al mapa el tag en este caso el caracer y que almacene el vector
 		outCodes[lf->c] = prefix;
 	}
 	else if (const InternalNode* in = dynamic_cast<const InternalNode*>(nodo)){
@@ -91,7 +92,7 @@ int main(){
 	int frequencies[UniqueSymbols] = { 0 };
 	std::string pal="";
 	std::cout << "Digite la palabra que desea codificar \n";
-	std::cin.ignore();
+	std::cin.clear();
 	std::getline(std::cin,pal);
 	const char* ptr = pal.c_str();
 	while (*ptr != '\0')
@@ -100,11 +101,11 @@ int main(){
 	INode* root = BuildTree(frequencies);  // crea el arbol que codifica con el metodo de huffman la expresion 
 
 	HuffCodeMap codes;
-	generadorCodigo(root, HuffCode(), codes);  // genera el codigo bnario del arbol
+	// genera el codigo bnario del arbol y lo almacena en el vector llamado HuffCode
+	generadorCodigo(root, HuffCode(), codes);  
 	delete root;
 
-	for (HuffCodeMap::const_iterator it = codes.begin(); it != codes.end(); ++it)
-	{
+	for (HuffCodeMap::const_iterator it = codes.begin(); it != codes.end(); ++it){
 		std::cout << it->first << " ";
 		std::copy(it->second.begin(), it->second.end(), std::ostream_iterator<bool>(std::cout));
 		std::cout << std::endl;
