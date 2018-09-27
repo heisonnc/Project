@@ -13,26 +13,23 @@ const char* SampleString = "";
 typedef std::vector<bool> HuffCode;// aqui se almacena el codigo binario del arbol
 typedef std::map<char, HuffCode> HuffCodeMap;  // crea un mapa con llave char que sera el caracter que codifico y guarda el codigo  binario para dicho caracter
  
-class INode
-{
+class INode{
 public:
-	const int f;
-
+	const int frequency;
 	virtual ~INode() {}
-
 protected:
-	INode(int f) : f(f) {}
+	INode(int f) : frequency(f) {}
 };
 
-class InternalNode : public INode  // esto es un nodo para el arbol, heredado de un nodo que solo tiene un atributo int
-{
+// esto es un nodo para el arbol, heredado de un nodo que solo tiene un atributo int
+class InternalNode : public INode{
+	//internalNode va a tener una frequencia que va a ser igual a la suma de INode left + INode right
 public:
 	INode *const left;
 	INode *const right;
-
-	InternalNode(INode* c0, INode* c1) : INode(c0->f + c1->f), left(c0), right(c1) {}
-	~InternalNode()
-	{
+	//En este constructor se suma la frequencia de dos nodos
+	InternalNode(INode* c0, INode* c1) : INode(c0->frequency + c1->frequency), left(c0), right(c1) {}
+	~InternalNode(){
 		delete left;
 		delete right;
 	}
