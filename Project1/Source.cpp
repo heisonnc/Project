@@ -44,14 +44,14 @@ public:
 	LeafNode(int f, char c) : INode(f), c(c) {}
 };
 
-// compara la frecuencia de 2 nodos
+// compara la frecuencia de 2 nodos usando sobrecarga de operador()
 struct NodeCmp{
 	bool operator()(const INode* lhs, const INode* rhs) const { return lhs->frequency > rhs->frequency; }
 };
 
 INode* BuildTree(const int(&frequencies)[UniqueSymbols]){
 	//declara un priority_queue automatico.
-	// esto inserta ordenado a la cola tree tomando en cuenta la frecuencia del caracter																
+	// esto inserta ordenado a la cola trees tomando en cuenta la frecuencia del caracter																
 	std::priority_queue<INode*, std::vector<INode*>, NodeCmp> trees;  
 	for (int i = 0; i < UniqueSymbols; ++i){
 		if (frequencies[i] != 0)
@@ -63,7 +63,7 @@ INode* BuildTree(const int(&frequencies)[UniqueSymbols]){
 
 		INode* hijoI = trees.top();
 		trees.pop();
-		// crea un nodo con los 2 ultimos pesos menores  y lo vuelve a insertar a la pila,
+		// crea un nodo con los 2 ultimos pesos menores  y lo vuelve a insertar a la cola,
 		//esto para crear la estructura del codigo de huffman
 		INode* padre = new InternalNode(hijoR, hijoI);//donde los que tienen menos frecuencia estan al final y a la derecha
 		trees.push(padre);
@@ -72,11 +72,11 @@ INode* BuildTree(const int(&frequencies)[UniqueSymbols]){
 }
 // metodo recursivo que genera el codigo binario de la expresion que se le ingreso
 void generadorCodigo(const INode* nodo, const HuffCode& prefix, HuffCodeMap& outCodes){
-	if (const LeafNode* lf = dynamic_cast<const LeafNode*>(nodo)){
-		//ingresa al mapa el tag en este caso el caracer y que almacene el vector
+	if (const LeafNode* lf = dynamic_cast<const LeafNode*>(nodo)){ //Primero crea las hojas
+		//ingresa al mapa el tag en este caso el caracter y que almacene el vector
 		outCodes[lf->c] = prefix;
 	}
-	else if (const InternalNode* in = dynamic_cast<const InternalNode*>(nodo)){
+	else if (const InternalNode* in = dynamic_cast<const InternalNode*>(nodo)){ //Luego con recursividad a los nodos del medio les asigna 0 y 1 hasta llegar a encontrar un caracter
 		HuffCode leftPrefix = prefix;
 		leftPrefix.push_back(false);  // aqui es donde se crea el codigo binario false->0 -> izquierda
 		generadorCodigo(in->left, leftPrefix, outCodes);
@@ -115,3 +115,4 @@ int main(){
 	system("pause");
 	return 0;
 }
+//aaaaabbbbbbbbbbcccccccddddddddeeeeeeeeeeeeeeefffffffffffffffffffffffffffffffffff
