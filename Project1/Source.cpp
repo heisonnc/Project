@@ -8,7 +8,7 @@
 
 const int UniqueSymbols = 1 << CHAR_BIT;
 const char* SampleString = "hholaaa";
-
+// hi-----------------------------------------
 typedef std::vector<bool> HuffCode;
 typedef std::map<char, HuffCode> HuffCodeMap;
 
