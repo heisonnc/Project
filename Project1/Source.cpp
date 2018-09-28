@@ -50,7 +50,7 @@ struct NodeCmp{
 };
 
 INode* BuildTree(const int(&frequencies)[UniqueSymbols]){
-	//declara un priority_queue automatico.
+	//Ordena la cola en 
 	// esto inserta ordenado a la cola trees tomando en cuenta la frecuencia del caracter																
 	std::priority_queue<INode*, std::vector<INode*>, NodeCmp> trees;  
 	for (int i = 0; i < UniqueSymbols; ++i){
