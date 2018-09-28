@@ -6,7 +6,7 @@
 #include <iterator>
 #include <algorithm>
 
-
+//hola mundo
 const int UniqueSymbols = 1 << 8;
 const char* SampleString = "";
 
